@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Web3 Tasks</title>
+
+<style>
+body{
+font-family:Arial;
+background:#0a0f1f;
+color:#00eaff;
+text-align:center;
+padding:20px;
+}
+
+.box{
+background:#111833;
+padding:20px;
+border-radius:12px;
+box-shadow:0 0 20px #00eaff55;
+max-width:420px;
+margin:auto;
+text-align:left;
+}
+
+.task{
+margin:8px 0;
+}
+
+input[type="text"]{
+background:#050a1a;
+border:1px solid #00eaff;
+color:#00eaff;
+border-radius:6px;
+padding:6px;
+width:80%;
+}
+
+.progress{
+text-align:center;
+margin-top:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h3>⚡ Web3 Daily Tasks</h3>
+
+<div id="tasks"></div>
+
+<div class="progress">
+Progresso: <span id="progress">0</span>/10
+</div>
+</div>
+
+<script>
+let data = JSON.parse(localStorage.getItem("tasks")) || 
+Array(10).fill({text:"Nova tarefa",done:false})
+
+function save(){
+localStorage.setItem("tasks",JSON.stringify(data))
+}
+
+function render(){
+let html=""
+let done=0
+
+data.forEach((t,i)=>{
+if(t.done) done++
+
+html+=`
+<div class="task">
+<input type="checkbox" ${t.done?"checked":""}
+onclick="toggle(${i})">
+
+<input type="text" value="${t.text}"
+onchange="edit(${i},this.value)">
+</div>`
+})
+
+document.getElementById("tasks").innerHTML=html
+document.getElementById("progress").textContent=done
+save()
+}
+
+function toggle(i){
+data[i].done=!data[i].done
+render()
+}
+
+function edit(i,v){
+data[i].text=v
+save()
+}
+
+render()
+</script>
+
+</body>
+</html>
